@@ -1,5 +1,5 @@
 import { randomBytes } from 'node:crypto';
-import { privateToPublic } from 'ethereumjs-util';
+import { privateToAddress } from 'ethereumjs-util';
 import { createWriteStream } from 'node:fs';
 import 'dotenv/config';
 
@@ -12,8 +12,7 @@ const main = async () => {
     writeStream.write('Private Key,Public Key\n');
     for(let i = 0; i < numberToGenerate; i++) {
         let privateKey = randomBytes(32);
-        let publicKey = privateToPublic(privateKey);
-        writeStream.write(`${privateKey.toString('hex')},${publicKey.toString('hex')}${i + 1 == numberToGenerate ? '' : '\n'}`);
+        writeStream.write(`${privateKey.toString('hex')},0x${privateToAddress(privateKey).toString('hex')}${i + 1 == numberToGenerate ? '' : '\n'}`);
     }
     writeStream.end();
     console.log('Wallets generated!');
